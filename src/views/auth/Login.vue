@@ -29,5 +29,6 @@ export default {
 
     return { email, password, handleSubmit, error }
   }
+  //hej
 }
 </script>
