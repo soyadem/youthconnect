@@ -5,7 +5,7 @@
         <h1><router-link :to="{ name: 'Home' }" class="brand">youthconnect</router-link></h1>
         <div class="links">
             <button class="nav-btn">MY ACTIVITIES</button>
-            <button class="nav-btn">ABOUT US</button>
+            <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
             <router-link class="btn" :to="{name: 'Signup'}">SIGN UP</router-link>
             <router-link class="btn" :to="{name: 'Login'}">LOGIN</router-link>
             <button class="nav-btn">LOGOUT</button>
