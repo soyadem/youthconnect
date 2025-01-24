@@ -16,9 +16,20 @@ const routes = [
   },
   {
     path: '/signup',
-    name: '/Signup',
+    name: 'Signup',
     component: Signup
+  }/*,
+  {
+    path: '/activity',
+    name: 'Activity',
+    component: Activity
+  },
+  {
+    path: 'aboutus',
+    name: 'AboutUs',
+    component: AboutUs
   }
+  */
 ]
 
 const router = createRouter({

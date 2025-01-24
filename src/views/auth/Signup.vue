@@ -1,13 +1,13 @@
 <template>
     <form @submit.prevent="handleSubmit">
-    <h3>Sign up</h3>
-    <input type="text" placeholder="Display name" v-model="displayName">
-    <input type="text" placeholder="School" v-model="school">
-    <input type="email" placeholder="Email" v-model="email">
-    <input type="password" placeholder="Password" v-model="password">
+    <h3>SIGN UP</h3>
+    <input type="text" placeholder="DISPLAY NAME" v-model="displayName">
+    <input type="text" placeholder="SCHOOL" v-model="school">
+    <input type="email" placeholder="EMAIL" v-model="email">
+    <input type="password" placeholder="PASSWORD" v-model="password">
     <div v-if="error" class="error">{{ error }}</div>
-    <button v-if="!isPending">Sign up</button>
-    <button v-if="isPending" disabled>Log in</button>
+    <button v-if="!isPending">SIGN UP</button>
+    <button v-if="isPending" disabled>LOGIN</button>
   </form>
 </template>
 
