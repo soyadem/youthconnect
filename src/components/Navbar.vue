@@ -4,7 +4,7 @@
         <img src="@/assets/bird.png" alt="">
         <h1><router-link :to="{ name: 'Home' }" class="brand">youthconnect</router-link></h1>
         <div class="links">
-            <button class="nav-btn">MY ACTIVITIES</button>
+            <router-link class="nav-btn" :to="{name: 'MyActivities'}">MY ACTIVITIES</router-link>
             <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
             <router-link class="btn" :to="{name: 'Signup'}">SIGN UP</router-link>
             <router-link class="btn" :to="{name: 'Login'}">LOGIN</router-link>

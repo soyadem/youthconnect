@@ -8,6 +8,5 @@
 export default {
   name: 'Home',
 }
-//Hrj med dig
 </script>
 
