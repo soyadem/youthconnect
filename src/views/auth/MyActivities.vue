@@ -18,7 +18,10 @@ export default {
       { image: require('@/assets/bowling1.webp'), name: "BOWLING"},
       { image: require('@/assets/dancing1.jpg'), name: "DANCING"},
       { image: require('@/assets/gaming1.jpg'), name: "GAMING"},
-      { image: require('@/assets/reading1.avif'), name: "READING"}
+      { image: require('@/assets/reading1.avif'), name: "READING"},
+      { image: require('@/assets/zoo1.jpg'), name: "ZOO"},
+      { image: require('@/assets/walking1.jpg'), name: "WALKING"},
+      { image: require('@/assets/picnic1.jpg'), name: "PICNIC"}
     ];
 
     return {

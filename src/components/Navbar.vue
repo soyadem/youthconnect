@@ -4,11 +4,15 @@
         <img src="@/assets/bird.png" alt="">
         <h1><router-link :to="{ name: 'Home' }" class="brand">youthconnect</router-link></h1>
         <div class="links">
-            <router-link class="nav-btn" :to="{name: 'MyActivities'}">MY ACTIVITIES</router-link>
+            <div v-if="user">
+                <router-link class="btn" :to="{name: 'MyActivities'}">MY ACTIVITIES</router-link>
+                <button class="btn" @click="handleClick">LOGOUT</button>
+            </div>
+            <div v-else>
             <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
             <router-link class="btn" :to="{name: 'Signup'}">SIGN UP</router-link>
             <router-link class="btn" :to="{name: 'Login'}">LOGIN</router-link>
-            <button @click="handleClick" class="nav-btn">LOGOUT</button>
+            </div>
         </div>
     </nav>
   </div>
@@ -16,10 +20,12 @@
 
 <script>
 import useLogout from '@/composables/useLogout'
+import getUser from '@/composables/getUser'
 import { useRouter } from 'vue-router'
 
 export default {
     setup() {
+        const { user } = getUser()
         const { logout } = useLogout()
         const router = useRouter()
 
@@ -28,7 +34,7 @@ export default {
             console.log('user logged out')
             router.push({name: 'Login'})
         }
-        return {handleClick}
+        return {handleClick, user}
     }
 }
 </script>
