@@ -22,30 +22,29 @@ export default {
 <style scoped>
 .activities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamisk antal kolonner */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsivt grid */
   gap: 20px; /* Afstand mellem bokse */
   margin-top: 20px;
 }
 
 .activity-card {
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Blød skygge */
+  border-radius: 8px; /* Afrundede hjørner */
+  background-color: #6853a0; /* Lilla baggrund */
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Blød skygge */
 }
 
 .activity-card:hover {
-  transform: translateY(-5px); /* Løfter boksen op ved hover */
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Øget skygge ved hover */
+  transform: translateY(-5px); /* Løft boksen ved hover */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Større skygge ved hover */
 }
 
 .activity-card p {
   margin: 0;
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333;
+  color: white; /* Hvid tekst */
 }
 </style>
