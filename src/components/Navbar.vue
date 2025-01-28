@@ -15,7 +15,13 @@
 </template>
 
 <script>
+import useLogout from '@/composables/useLogout'
+
+import { useRouter } from 'vue-router'
 export default {
+    setup(){
+        
+    }
 
 }
 </script>

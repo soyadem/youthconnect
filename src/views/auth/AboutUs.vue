@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="purple-section">
-      <h1 class="white-text">ABOUT US</h1>
+      <h1 class="white-text">ABOUT<br>US</h1>
     </div>
     <div class="white-section">
       <p>Lorem Ipsum<br><br>
@@ -51,7 +51,7 @@ html, body {
 
 .white-text {
   color: white;
-  font-size: 4rem; 
+  font-size: 4.8rem; 
   font-weight: bold; 
   text-transform: uppercase; 
 }
@@ -70,6 +70,6 @@ html, body {
 .white-section p {
   /*font-weight: bold;*/
   font-style: italic;
-  font-size: 2.6rem; 
+  font-size: 2.7rem; 
 }
 </style>
