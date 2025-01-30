@@ -1,12 +1,12 @@
 <template>
     <form @submit.prevent="handleSubmit">
-        <h4>Create New Activity</h4>
-        <input type="text" required placeholder="Activity title" v-model="title">
-        <textarea required placeholder="Create description..." v-model="description"></textarea>
-        <label>Upload activity cover image</label>
+        <h4>CREATE NEW</h4>
+        <input type="text" required placeholder="ACTIVITY TITLE" v-model="title">
+        <textarea required placeholder="CREATE DESCRIPTION..." v-model="description"></textarea>
+        <label>UPLOAD ACTIVITY COVER IMAGE</label>
         <input type="file">
         <div class="error"></div>
-        <button>Create</button>
+        <button>CREATE</button>
         
     </form>
 </template>
