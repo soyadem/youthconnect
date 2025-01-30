@@ -27,7 +27,7 @@ export default {
       const res = await login(email.value, password.value)
       if (!error.value) {
         console.log('user logged in')
-        router.push('/') // Navigate to the home page after successful login
+        router.push('/')
       }
     }
 
