@@ -28,7 +28,7 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/activities',
+    path: '/create',
     name: 'CreateActivity',
     component: CreateActivity
   },
