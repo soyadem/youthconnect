@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/auth/Login.vue'
 import Signup from '../views/auth/Signup.vue'
 import AboutUs from '../views/auth/AboutUs.vue'
+import CreatePlaylist from '../views/activities/CreateActivity'
 import MyActivities from '../views/auth/MyActivities.vue'
 
 const routes = [
@@ -25,6 +26,11 @@ const routes = [
     path: '/aboutus',
     name: 'AboutUs',
     component: AboutUs
+  },
+  {
+    path: '/activities',
+    name: 'CreateActivity',
+    component: CreatePlaylist
   },
   {
     path: '/myactivities',
