@@ -7,7 +7,8 @@ const firebaseConfig = {
     apiKey: "AIzaSyAcTtyDL7TzbGHsb_kjc9kHJCSXk_m4bM8",
     authDomain: "youthconnect-2025.firebaseapp.com",
     projectId: "youthconnect-2025",
-    storageBucket: "youthconnect-2025.firebasestorage.app",
+    databaseURL: "https://youthconnect-2025-default-rtdb.europe-west1.firebasedatabase.app",
+    storageBucket: "youthconnect-2025.appspot.com",
     messagingSenderId: "853669693698",
     appId: "1:853669693698:web:38ac3018567fbe004fda1b"
   };
