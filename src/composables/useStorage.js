@@ -1,5 +1,4 @@
 import { ref } from "vue";
-import { projectFirestore } from "../firebase/config";
 import getUser from "./getUser";
 
 const { user } = getUser();
@@ -7,44 +6,38 @@ const { user } = getUser();
 const useStorage = () => {
   const error = ref(null);
   const url = ref(null);
+  const filePath = ref(null);
 
   const uploadImage = async (file) => {
-    if (!file) {
-      error.value = "No file selected";
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("image", file);
-
     try {
-      //gemmer selve billedet i skyen (imgbb)
-      const res = await fetch("https://api.imgbb.com/1/upload?key=0ba5a1ed1425bce346224daa185fd438", {
+      // FormData til at uploade fil til ImgBB
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // Din ImgBB API-nøgle
+      const API_KEY = "0ba5a1ed1425bce346224daa185fd438";
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
         method: "POST",
         body: formData,
       });
 
-      const data = await res.json();
-      if (!data.success) {
-        throw new Error("Image upload failed");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error.message || "Upload failed");
       }
 
+      // Gem URL'en fra ImgBB
       url.value = data.data.url;
-      console.log("Image uploaded: ", url.value);
+      filePath.value = data.data.delete_url; // Gem evt. delete URL, hvis du vil slette billeder senere
 
-      //gemmer billede-url i firestore
-      await projectFirestore.collection("images").add({
-        userId: user.value.uid,
-        imageUrl: url.value,
-        createdAt: new Date()
-      });
     } catch (err) {
-      console.log("Error uploading file:", err.message);
+      console.error("Upload error:", err.message);
       error.value = err.message;
     }
   };
 
-  return { uploadImage, url, error };
+  return { uploadImage, url, filePath, error };
 };
 
 export default useStorage;

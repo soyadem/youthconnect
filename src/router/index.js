@@ -3,7 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/auth/Login.vue'
 import Signup from '../views/auth/Signup.vue'
 import AboutUs from '../views/auth/AboutUs.vue'
-import CreateActivity from '../views/activities/CreateActivity'
+import CreateCategory from '../views/activities/CreateCategory'
 import MyActivities from '../views/auth/MyActivities.vue'
 
 const routes = [
@@ -28,9 +28,9 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/create',
-    name: 'CreateActivity',
-    component: CreateActivity
+    path: '/categories/create',
+    name: 'CreateCategory',
+    component: CreateCategory
   },
   {
     path: '/myactivities',
