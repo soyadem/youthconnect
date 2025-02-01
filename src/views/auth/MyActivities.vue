@@ -67,7 +67,4 @@ export default {
   border-radius: 12px;
   margin-bottom: 20px; /* Mere afstand mellem billede og tekst */
 }
-
-
-
 </style>

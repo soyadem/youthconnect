@@ -1,8 +1,12 @@
 <template>
   <div class="home">
     <div v-if="error" class="error">Could not fetch the data</div>
-    <div v-if="documents">
-      <div v-for="doc in documents" :key="doc.id">{{ doc.title }}</div>
+
+    <div v-if="documents" class="activities-grid">
+      <div v-for="doc in documents" :key="doc.id" class="activity-card">
+        <img v-if="doc.image" :src="doc.image" :alt="doc.title" class="activity-image" />
+        <p>{{ doc.title }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -13,10 +17,49 @@ import getCollection from '../composables/getCollection'
 export default {
   name: 'Home',
   setup() {
-    const { error, documents } = getCollection('playlists')
-
+    const { error, documents } = getCollection('category')
     return { error, documents }
+
+    
   }
 }
 </script>
 
+<style scoped>
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px; 
+  margin-top: 30px;
+}
+
+.activity-card {
+  padding: 23px; 
+  border-radius: 15px; 
+  background-color: #6853a0; 
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1); 
+}
+
+.activity-card:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.2); 
+}
+
+.activity-card p {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white; 
+}
+
+.activity-image {
+  width: 100%; 
+  height: 260px; 
+  object-fit: cover; 
+  border-radius: 12px;
+  margin-bottom: 20px; 
+}
+
+</style>
