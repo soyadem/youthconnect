@@ -50,7 +50,7 @@ export default {
   }
 
   isPending.value = true;
-  await uploadImage(file.value); // Uploader til ImgBB
+  await uploadImage(file.value); // Upload til ImgBB
 
   console.log("Uploaded image URL:", url.value); // Debugging
 
@@ -59,8 +59,8 @@ export default {
     description: description.value,
     userId: user.value.uid,
     userName: user.value.displayName,
-    coverUrl: url.value, // Gem ImgBB URL i Firestore
-    filePath: filePath.value, // (valgfrit) Gem delete URL fra ImgBB
+    coverUrl: url.value, // Her gemmes billedets URL korrekt
+    filePath: filePath.value, // (Valgfrit) Sletnings-URL fra ImgBB
     activities: [],
     createdAt: timestamp(),
   });

@@ -4,13 +4,12 @@
 
     <div v-if="documents" class="activities-grid">
       <div v-for="doc in documents" :key="doc.id" class="activity-card">
-        <img v-if="doc.image" :src="doc.image" :alt="doc.title" class="activity-image" />
+        <img v-if="doc.coverUrl" :src="doc.coverUrl" :alt="doc.title" class="activity-image" />
         <p>{{ doc.title }}</p>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import getCollection from '../composables/getCollection'
 

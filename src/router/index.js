@@ -4,7 +4,6 @@ import Login from '../views/auth/Login.vue'
 import Signup from '../views/auth/Signup.vue'
 import AboutUs from '../views/auth/AboutUs.vue'
 import CreateCategory from '../views/activities/CreateCategory'
-import MyActivities from '../views/auth/MyActivities.vue'
 
 const routes = [
   {
@@ -31,11 +30,6 @@ const routes = [
     path: '/categories/create',
     name: 'CreateCategory',
     component: CreateCategory
-  },
-  {
-    path: '/myactivities',
-    name: 'MyActivities',
-    component: MyActivities
   }
 ]
 

@@ -6,7 +6,6 @@
         <div class="links">
             <div v-if="user">
                 <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
-                <router-link class="btn" :to="{name: 'MyActivities'}">MY ACTIVITIES</router-link>
                 <button class="btn" @click="handleClick">LOGOUT</button>
             </div>
             <div v-else>
@@ -72,27 +71,24 @@ export default {
     .nav-btn {
     background-color: #6853a0;
     color: #ffffff;
-    border: none; /* Fjern standardkant */
-    padding: 10px 20px; /* Juster polstring efter behov */
-    border-radius: 5px; /* Tilføj afrundede hjørner efter behov */
-    cursor: pointer; /* Skift musemarkøren til en hånd ved hover */
-    transition: transform 0.5s ease; /* Tilføj en transition for transformering */
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: transform 0.5s ease; 
     }
     .btn {
     background-color: #6853a0;
     color: #ffffff;
     padding: 10px 20px;
     border-radius: 5px;
-    text-decoration: none; /* Fjern understregning */
-    display: inline-block; /* Sørg for, at elementet opfører sig som en knap */
-    transition: transform 0.5s ease; /* Tilføj en transition for transformering */
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
     }
     .nav-btn:hover,
     .btn:hover {
-    background-color: #6853a0; /* En mørkere nuance af #6853a0 */
+    background-color: #6853a0;
     transform: scale(1.1);
     }
-
-
-
 </style>
