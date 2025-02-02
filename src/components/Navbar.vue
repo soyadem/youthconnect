@@ -6,7 +6,7 @@
         <div class="links">
             <div v-if="user">
                 <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
-                <button class="btn" @click="handleClick">LOGOUT</button>
+                <button class="logout-btn" @click="handleClick">LOGOUT</button>
             </div>
             <div v-else>
             <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
@@ -77,7 +77,20 @@ export default {
     cursor: pointer; 
     transition: transform 0.5s ease; 
     }
+    .logout-btn {
+    background-color: #d9534f;
+    margin-top: -5px;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
+    
+    }
+
     .btn {
+    margin-top: -5px;
     background-color: #6853a0;
     color: #ffffff;
     padding: 10px 20px;
@@ -89,6 +102,10 @@ export default {
     .nav-btn:hover,
     .btn:hover {
     background-color: #6853a0;
+    transform: scale(1.1);
+    }
+    .logout-btn:hover {
+    background-color: #d9534f;
     transform: scale(1.1);
     }
 </style>

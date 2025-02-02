@@ -33,8 +33,8 @@ export default {
 }
 
 .activity-card {
-  padding: 23px; 
-  border-radius: 15px; 
+  padding: 15px; 
+  border-radius: 20px; 
   background-color: #6853a0; 
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -42,23 +42,23 @@ export default {
 }
 
 .activity-card:hover {
-  transform: translateY(-10px); 
+  transform: translateY(-15px); 
   box-shadow: 0 12px 18px rgba(0, 0, 0, 0.2); 
 }
 
 .activity-card p {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: white; 
 }
 
 .activity-image {
   width: 100%; 
-  height: 260px; 
+  height: 190px; 
   object-fit: cover; 
   border-radius: 12px;
-  margin-bottom: 20px; 
+  margin-bottom: 6px; 
 }
 
 </style>
