@@ -40,7 +40,8 @@ const routes = [
   {
     path: '/categories/create',
     name: 'CreateCategory',
-    component: CreateCategory
+    component: CreateCategory,
+    beforeEnter: requireAuth
   },
   {
     path: '/categories/:id',
