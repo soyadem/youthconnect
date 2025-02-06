@@ -1,25 +1,27 @@
 <template>
   <div class="home">
-    <div v-if="error" class="error">Could not fetch the data</div>
+    <div v-if="documents && documents.length > 0" class="activities-grid">
 
-    <div v-if="documents" class="activities-grid">
-      <div v-for="doc in documents" :key="doc.id" class="activity-card">
-        <img v-if="doc.coverUrl" :src="doc.coverUrl" :alt="doc.title" class="activity-image" />
-        <p>{{ doc.title }}</p> <!--test-->
-      </div>
-    </div>
+
+
+  <div v-for="doc in documents" :key="doc.id" class="activity-card">
+    <router-link :to="{ name: 'CategoryDetails', params: { id: doc.id }}">
+    <img v-if="doc.coverUrl" :src="doc.coverUrl" :alt="doc.title" class="activity-image" />
+    <p>{{ doc.title }}</p></router-link>
+  </div>
+</div>
   </div>
 </template>
 <script>
+
+
 import getCollection from '../composables/getCollection'
 
 export default {
   name: 'Home',
-  setup() {
+   setup() {
     const { error, documents } = getCollection('category')
     return { error, documents }
-
-    
   }
 }
 </script>
