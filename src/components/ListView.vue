@@ -24,7 +24,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   background: white;
   margin: 16px 0;
   transition: all ease 0.2s;
@@ -35,10 +35,16 @@ export default {
   transition: all ease 0.2;
 }
 .thumbnail {
-  max-width: 150px;
-  max-height: 150px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 14px;
+}
+.thumbnail img {
+  width: 100%;  /* Sikrer at billedet fylder containeren */
+  height: 100%; /* Gør at billedet altid fylder hele containeren */
+  object-fit: cover; /* Sikrer at billedet bevarer proportioner og beskæres hvis nødvendigt */
+  display: block;
 }
 img {
   max-width:100%;

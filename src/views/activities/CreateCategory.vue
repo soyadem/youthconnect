@@ -18,7 +18,7 @@
       <input type="file" @change="handleChange" />
       <div class="error">{{ fileError }}</div>
 
-      <button v-if="!isPending">CREATE</button>
+      <button class="btn" v-if="!isPending">CREATE</button>
       <button v-else disabled>SAVING...</button>
     </form>
   </div>
@@ -99,7 +99,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 form {
   background: white;
 }
@@ -115,6 +115,21 @@ label {
 button {
   margin-top: 20px;
 }
+.btn {
+    margin-top: -5px;
+    background-color: #6853a0;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
+    }
+    .nav-btn:hover,
+    .btn:hover {
+    background-color: #6853a0;
+    transform: scale(1.1);
+    }
 </style>
 
 

@@ -6,7 +6,7 @@
     <input type="email" placeholder="EMAIL" v-model="email">
     <input type="password" placeholder="PASSWORD" v-model="password">
     <div v-if="error" class="error">{{ error }}</div>
-    <button v-if="!isPending">SIGN UP</button>
+    <button class="btn" v-if="!isPending">SIGN UP</button>
     <button v-if="isPending" disabled>LOGIN</button>
   </form>
 </template>
@@ -35,6 +35,20 @@ export default {
 }
 </script>
 
-<style
-
+<style scoped>
+    .btn {
+    margin-top: -5px;
+    background-color: #6853a0;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
+    }
+    .nav-btn:hover,
+    .btn:hover {
+    background-color: #6853a0;
+    transform: scale(1.1);
+    }
 </style>

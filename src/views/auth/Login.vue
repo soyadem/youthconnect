@@ -4,7 +4,7 @@
     <input type="email" placeholder="EMAIL" v-model="email">
     <input type="password" placeholder="PASSWORD" v-model="password">
     <div v-if="error" class="error">{{ error }}</div>
-    <button v-if="!isPending">LOGIN</button>
+    <button class="login-btn" v-if="!isPending">LOGIN</button>
     <button v-if="isPending" disabled>LOGIN</button>
   </form>
 </template>
@@ -35,3 +35,20 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.login-btn {
+    background-color: green;
+    margin-top: -5px;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
+}
+.login-btn:hover {
+    background-color: green;
+    transform: scale(1.1);
+    }
+</style>

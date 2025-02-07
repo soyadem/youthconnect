@@ -12,7 +12,7 @@
             <div v-else>
             <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
             <router-link class="btn" :to="{name: 'Signup'}">SIGN UP</router-link>
-            <router-link class="btn" :to="{name: 'Login'}">LOGIN</router-link>
+            <router-link class="login-btn" :to="{name: 'Login'}">LOGIN</router-link>
             </div>
         </div>
     </nav>
@@ -107,6 +107,20 @@ export default {
     }
     .logout-btn:hover {
     background-color: #d9534f;
+    transform: scale(1.1);
+    }
+    .login-btn {
+    background-color: green;
+    margin-top: -5px;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
+}
+.login-btn:hover {
+    background-color: green;
     transform: scale(1.1);
     }
 </style>
