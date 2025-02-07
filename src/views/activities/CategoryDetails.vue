@@ -10,15 +10,23 @@
       <h2>{{ category.title }}</h2>
       <p class="username">Created by {{ category.userName }}</p>
       <p class="description">{{ category.description }}</p>
-    </div>
+      </div>
+
+      <div class="activity-list">
+        <p> ACTIVITY LIST HERE</p>
+        <AddActivity />
+      </div>
+      
   </div>
 </template>
 
 <script>
+import AddActivity from '@/components/AddActivity.vue'
 import getDocument from '@/composables/getDocument'
 
 export default {
   props: ['id'],
+  components: { AddActivity },
   setup(props) {
     const { error, document: category } = getDocument('category', props.id)
 
@@ -48,6 +56,7 @@ export default {
   min-height: 100%;
   max-width: 100%;
   max-height: 100%;
+  object-fit: cover;
 }
 .category-info {
   text-align: center;
