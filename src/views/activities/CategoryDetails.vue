@@ -2,27 +2,37 @@
   <div class="error" v-if="error">{{ error }}</div>
   <div v-if="category" class="category-details">
 
-    <!-- playlist information -->
     <div class="category-info">
       <div class="cover">
         <img :src="category.coverUrl">
       </div>
       <h2>{{ category.title }}</h2>
       <p class="username">Created by {{ category.userName }}</p>
-      <p class="description">{{ category.description }}</p>
-      </div>
-
-      <div class="activity-list">
-        <p> ACTIVITY LIST HERE</p>
-        <AddActivity />
+      
+      <!-- ICON-SEKTION -->
+      <div class="category-icon">
+        <img v-if="category.iconType" :src="iconMap[category.iconType]" alt="Category Icon">
+        <p class="icon-text"> <em>{{ iconDescriptions[category.iconType] }}</em></p>
       </div>
       
+      <p class="description">{{ category.description }}</p>
+    </div>
+
+    <div class="activity-list">
+      <p>ACTIVITY LIST HERE</p>
+      <AddActivity />
+    </div>
+
   </div>
 </template>
 
 <script>
 import AddActivity from '@/components/AddActivity.vue'
 import getDocument from '@/composables/getDocument'
+import communityIcon from '@/assets/icons/community.png'
+import confidenceIcon from '@/assets/icons/confidence.png'
+import mentalIcon from '@/assets/icons/mental.png'
+import movementIcon from '@/assets/icons/movement.png'
 
 export default {
   props: ['id'],
@@ -30,7 +40,20 @@ export default {
   setup(props) {
     const { error, document: category } = getDocument('category', props.id)
 
-    return { error, category }
+    const iconMap = {
+      community: communityIcon,
+      confidence: confidenceIcon,
+      mental: mentalIcon,
+      movement: movementIcon
+    }
+    const iconDescriptions = {
+      community: 'CATEGORY FOSTERS A SENSE OF COMMUNITY AND ENCOURAGES MEANINGFUL CONNECTIONS',
+      confidence: 'CATEGORY BOOSTS SELF-CONFIDENCE AND EMPOWERS PERSONAL GROWTH.',
+      mental: 'THIS ACTIVITY SUPPORTS MENTAL WELL-BEING AND HELPS BRING PEACE OF MIND',
+      movement: 'CATEGORY PROMOTES PHYSICAL MOVEMENT, ENHANCING STRENGTH AND VITALITY.'
+    }
+
+    return { error, category, iconMap, iconDescriptions }
   }
 }
 </script>
@@ -74,5 +97,23 @@ export default {
 }
 .description {
   text-align: left;
+}
+.category-icon {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.category-icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.icon-text em{
+  font-size: 14px;
+  font-weight: bold;
+  color: #6853a0 !important;
+  font-style: italic;
 }
 </style>
