@@ -20,7 +20,7 @@
 
     <div class="activity-list">
       <p>ACTIVITY LIST HERE</p>
-      <AddActivity />
+      <AddActivity :category="category"/>
     </div>
 
   </div>
