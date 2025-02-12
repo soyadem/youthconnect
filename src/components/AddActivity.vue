@@ -1,6 +1,6 @@
 <template>
   <div class="add-activity">
-    <button v-if="!showForm" @click="showForm = true">ADD ACTIVITIES</button>
+    <button class="btn" v-if="!showForm" @click="showForm = true">ADD ACTIVITIES</button>
     <form v-if="showForm" @submit.prevent="handleSubmit">
       <h4>ADD A NEW ACTIVITY</h4>
       <input type="text" placeholder="ACTIVITY TITLE" required v-model="title">
@@ -44,5 +44,9 @@ export default {
   form {
     max-width: 100%;
     text-align: left;
+  }
+  .btn {
+    display: flex;
+    justify-content: flex-start;
   }
 </style>
