@@ -13,21 +13,35 @@
 
 <script>
 import { ref } from 'vue'
+import useCollection from '@/composables/useCollection'
+
 export default {
-  setup() {
+  props: ['category'],
+  setup(props) {
     const title = ref('')
     const location = ref('')
     const time = ref('')
     const showForm = ref(false)
+    const { updateDoc } = useCollection('category')
 
     const handleSubmit = async () => {
+      if (!props.category || !props.category.id) {
+        console.error("Category or category ID is undefined")
+        return
+      }
+
       const newActivity = {
         title: title.value,
         location: location.value,
         time: time.value,
         id: Math.floor(Math.random() * 1000)
       }
-      console.log(newActivity)
+      await updateDoc(props.category.id, {
+        activities: [...(props.category.activities || []), newActivity]
+      })
+      title.value = ''
+      location.value = ''
+      time.value = ''
     }
 
     return { title, location, time, showForm, handleSubmit }

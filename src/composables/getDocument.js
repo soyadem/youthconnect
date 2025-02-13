@@ -5,7 +5,6 @@ const getDocument = (collection, id) => {
   const document = ref(null)
   const error = ref(null)
 
-  // Reference the specific document in Firestore
   const docRef = projectFirestore.collection(collection).doc(id)
 
   const unsub = docRef.onSnapshot(doc => {
@@ -20,7 +19,6 @@ const getDocument = (collection, id) => {
     error.value = 'Could not fetch the data'
   })
 
-  // Cleanup listener on component unmount
   watchEffect((onInvalidate) => {
     onInvalidate(() => unsub());
   });

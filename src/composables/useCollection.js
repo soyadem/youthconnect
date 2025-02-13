@@ -6,7 +6,6 @@ const useCollection = (collection) => {
   const error = ref(null)
   const isPending = ref(false)
 
-  // add a new document
   const addDoc = async (doc) => {
     error.value = null
     isPending.value = true
@@ -21,8 +20,23 @@ const useCollection = (collection) => {
       isPending.value = false
     }
   }
+  const updateDoc = async (docId, updates) => {
+    error.value = null
+    isPending.value = true
 
-  return { error, addDoc, isPending }
+    try {
+      const docRef = projectFirestore.collection(collection).doc(docId)
+      const res = await docRef.update(updates)
+      isPending.value = false
+      return res
+    } catch (err) {
+      console.error(err.message)
+      error.value = 'Could not update the document'
+      isPending.value = false
+    }
+  }
+
+  return { error, addDoc, isPending, updateDoc }
 
 }
 

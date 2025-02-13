@@ -19,7 +19,14 @@
     </div>
 
     <div class="activity-list">
-      <p>ACTIVITY LIST HERE</p>
+      <div v-if="!category.activities.length">NO ACTIVITIES HAVE BEEN ADDED TO THIS PLAYLIST YET.</div>
+      <div v-for="activity in category.activities" :key="activity.id" class="single-activity">
+        <div class="detail">
+          <h3>{{ activity.title }}</h3>
+          <p>{{ activity.location }}</p>
+          <p>{{ activity.time }}</p>
+        </div>
+      </div>
       <AddActivity :category="category"/>
     </div>
 
@@ -115,5 +122,13 @@ export default {
   font-weight: bold;
   color: #6853a0 !important;
   font-style: italic;
+}
+.single-activity {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--secondary);
+  margin-bottom: 20px;
 }
 </style>
