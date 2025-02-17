@@ -63,4 +63,17 @@ export default {
     display: flex;
     justify-content: flex-start;
   }
+  .btn {
+  
+    background-color: #6853a0;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: transform 0.5s ease;
+    }
+    .btn:hover {
+    background-color: #6853a0;
+    transform: scale(1.1);
+    }
 </style>

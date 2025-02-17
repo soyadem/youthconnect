@@ -9,7 +9,6 @@
       <h2>{{ category.title }}</h2>
       <p class="username">Created by {{ category.userName }}</p>
       
-      <!-- ICON-SEKTION -->
       <div class="category-icon">
         <img v-if="category.iconType" :src="iconMap[category.iconType]" alt="Category Icon">
         <p class="icon-text"> <em>{{ iconDescriptions[category.iconType] }}</em></p>
@@ -26,6 +25,7 @@
           <p>{{ activity.location }}</p>
           <p>{{ activity.time }}</p>
         </div>
+        <button class="register-btn">REGISTER</button>
       </div>
       <AddActivity :category="category"/>
     </div>
@@ -131,4 +131,18 @@ export default {
   border-bottom: 1px dashed var(--secondary);
   margin-bottom: 20px;
 }
+.register-btn {
+    background-color: green;
+    margin-top: -5px;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; 
+    transition: transform 0.5s ease;
+}
+.register-btn:hover {
+    background-color: green;
+    transform: scale(1.1);
+    }
 </style>
