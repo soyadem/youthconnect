@@ -1,75 +1,46 @@
-<template>
-  <div class="max-w-2xl mx-auto p-4">
-    <h1 class="text-xl font-bold mb-4">Forum</h1>
+<script setup>
+import { ref } from "vue";
+import getCollection from "@/composables/getCollection"; // Hent data
+import { projectFirestore, timestamp } from "@/firebase/config"; // Firebase konfiguration
 
-    <!-- Liste af emner -->
-    <div>
-      <div v-for="(topic, index) in topics" :key="index" class="mb-4 p-4 border rounded-lg">
-        <h2 class="text-lg font-bold cursor-pointer" @click="selectTopic(index)">
-          {{ topic.title }}
-        </h2>
-      </div>
-    </div>
+const { documents: posts, error } = getCollection("posts");
+const newPost = ref("");
+const username = ref("Bruger123");
 
-    <!-- Hvis et emne er valgt, vis et tekstfelt for at skrive et opslag -->
-    <div v-if="selectedTopic !== null" class="mt-4 p-4 border rounded-lg">
-      <h2 class="text-lg font-bold">Skriv et opslag til emnet: {{ topics[selectedTopic].title }}</h2>
-      <textarea
-        v-model="topics[selectedTopic].newPost"
-        placeholder="Skriv dit opslag her..."
-        class="w-full mb-2 p-2 border rounded"
-      ></textarea>
-      <button
-        @click="handlePostSubmit"
-        class="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Opret Indlæg
-      </button>
-    </div>
-
-    <!-- Vis opslag for det valgte emne -->
-    <div v-if="selectedTopic !== null" class="mt-4">
-      <div v-for="(post, index) in topics[selectedTopic].posts" :key="index" class="mb-4 p-4 border rounded-lg">
-        <p>{{ post }}</p>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      // Liste af emner
-      topics: [
-        { title: "Emne 1", posts: [], newPost: "" },
-        { title: "Emne 2", posts: [], newPost: "" },
-        { title: "Emne 3", posts: [], newPost: "" }
-      ],
-      selectedTopic: null // Den valgte emne
-    };
-  },
-  methods: {
-    // Når et emne vælges
-    selectTopic(index) {
-      this.selectedTopic = index;
-    },
-    // Opret opslag i det valgte emne
-    handlePostSubmit() {
-      if (this.selectedTopic !== null && this.topics[this.selectedTopic].newPost) {
-        this.topics[this.selectedTopic].posts.push(this.topics[this.selectedTopic].newPost);
-        this.topics[this.selectedTopic].newPost = ""; // Tøm tekstfeltet efter indlæg
-      }
+// Funktion til at sende et nyt indlæg
+const submitPost = async () => {
+    if (newPost.value.trim()) {
+        await projectFirestore.collection("posts").add({
+            username: username.value,
+            content: newPost.value,
+            createdAt: timestamp(),
+        });
+        newPost.value = ""; // Nulstil inputfelt
     }
-  }
 };
 </script>
 
-<style>
-  .border {
-    border: 1px solid #ddd;
-  }
-  .cursor-pointer {
-    cursor: pointer;
-  }
-</style>
+<template>
+    <div class="max-w-2xl mx-auto p-6 bg-gray-100 rounded-xl shadow-md">
+        <h2 class="text-2xl font-bold mb-4 text-center">Forum</h2>
+        <div class="flex flex-col gap-4">
+            <textarea v-model="newPost"
+                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Skriv dit indlæg..."></textarea>
+            <button @click="submitPost"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition">
+                Send
+            </button>
+        </div>
+
+        <div v-if="error" class="text-red-500 mt-4">{{ error }}</div>
+
+        <div class="mt-6 space-y-4">
+            <div v-for="post in posts" :key="post.id"
+                class="p-4 bg-white rounded-lg shadow flex flex-col">
+                <p class="text-sm text-gray-500">{{ post.username }}</p>
+                <p class="text-lg text-gray-800">{{ post.content }}</p>
+            </div>
+        </div>
+    </div>
+</template>
