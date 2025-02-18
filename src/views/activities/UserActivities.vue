@@ -14,11 +14,9 @@ export default {
 
 <template>
   <div class="activity-list">
-    <h2>MY ACTIVITIES</h2>
     <div v-if="registeredActivities.length">
       <div v-for="activity in registeredActivities" :key="activity.id" class="single">
         <div class="thumbnail">
-          <!-- Vist billede hvis coverUrl findes -->
           <img v-if="activity.coverUrl" :src="activity.coverUrl" :alt="activity.title" class="activity-image" />
         </div>
         <div class="info">
@@ -28,7 +26,6 @@ export default {
         </div>
       </div>
     </div>
-    <p v-else>No registered activities yet.</p>
   </div>
 </template>
 

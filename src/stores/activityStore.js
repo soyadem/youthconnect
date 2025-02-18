@@ -5,7 +5,6 @@ import { projectFirestore, projectAuth, timestamp } from '@/firebase/config'
 export const useActivityStore = defineStore('activityStore', () => {
   const registeredActivities = ref([])
 
-  // 🔥 Hent aktiviteter fra Firestore ved opstart
   const fetchActivities = async () => {
     const user = projectAuth.currentUser
     if (!user) return
@@ -17,13 +16,18 @@ export const useActivityStore = defineStore('activityStore', () => {
     registeredActivities.value = res.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   }
 
-  // 🔥 Registrer aktivitet og gem i Firestore
-  const registerActivity = async (activity) => {
+  const registerActivity = async (activity, coverUrl) => {
     const user = projectAuth.currentUser
     if (!user) return
 
+    if (!coverUrl) {
+      console.error("Fejl: coverUrl er undefined!", activity)
+      return
+    }
+
     const newActivity = {
       ...activity,
+      coverUrl,
       userId: user.uid,
       createdAt: timestamp()
     }
