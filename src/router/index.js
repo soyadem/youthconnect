@@ -5,11 +5,8 @@ import Signup from '../views/auth/Signup.vue'
 import AboutUs from '../views/auth/AboutUs.vue'
 import CreateCategory from '../views/activities/CreateCategory'
 import CategoryDetails from '../views/activities/CategoryDetails'
-<<<<<<< HEAD
 import Forum from '../components/Forum'
-=======
 import UserActivities from '../views/activities/UserActivities'
->>>>>>> 17a0d5946b008bb435458686feb327d042b91cc8
 
 import { projectAuth } from '../firebase/config'
 
@@ -56,15 +53,14 @@ const routes = [
     props: true
   },
   {
-<<<<<<< HEAD
     path: '/forum',
     name: 'Forum',
     component: Forum,
-=======
+  },
+  {
     path: '/activities/user',
     name: 'UserActivities',
     component: UserActivities,
->>>>>>> 17a0d5946b008bb435458686feb327d042b91cc8
     beforeEnter: requireAuth
   }
 ];
