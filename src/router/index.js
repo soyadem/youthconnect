@@ -5,6 +5,7 @@ import Signup from '../views/auth/Signup.vue'
 import AboutUs from '../views/auth/AboutUs.vue'
 import CreateCategory from '../views/activities/CreateCategory'
 import CategoryDetails from '../views/activities/CategoryDetails'
+import UserActivities from '../views/activities/UserActivities'
 
 import { projectAuth } from '../firebase/config'
 
@@ -49,6 +50,12 @@ const routes = [
     component: CategoryDetails,
     beforeEnter: requireAuth,
     props: true
+  },
+  {
+    path: '/activities/user',
+    name: 'UserActivities',
+    component: UserActivities,
+    beforeEnter: requireAuth
   }
 ];
 
