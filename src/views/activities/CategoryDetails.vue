@@ -25,7 +25,7 @@
           <p>{{ activity.location }}</p>
           <p>{{ activity.time }}</p>
         </div>
-        <button class="register-btn">REGISTER</button>
+        <button class="register-btn" @click="registerActivity(activity)">REGISTER</button>
       </div>
       <AddActivity :category="category"/>
     </div>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { useActivityStore } from '@/stores/activityStore'
 import AddActivity from '@/components/AddActivity.vue'
 import getDocument from '@/composables/getDocument'
 import communityIcon from '@/assets/icons/community.png'
@@ -46,6 +47,7 @@ export default {
   components: { AddActivity },
   setup(props) {
     const { error, document: category } = getDocument('category', props.id)
+    const store = useActivityStore()
 
     const iconMap = {
       community: communityIcon,
@@ -60,7 +62,11 @@ export default {
       movement: 'CATEGORY PROMOTES PHYSICAL MOVEMENT, ENHANCING STRENGTH AND VITALITY.'
     }
 
-    return { error, category, iconMap, iconDescriptions }
+    const registerActivity = (activity) => {
+      store.registerActivity(activity)
+    }
+
+    return { error, category, iconMap, iconDescriptions, registerActivity }
   }
 }
 </script>
