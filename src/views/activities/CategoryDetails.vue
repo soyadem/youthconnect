@@ -4,7 +4,7 @@
 
     <div class="category-info">
       <div class="cover">
-        <img :src="category.coverUrl">
+        <img :src="category.coverUrl" alt="Category Cover">
       </div>
       <h2>{{ category.title }}</h2>
       <p class="username">Created by {{ category.userName }}</p>
@@ -19,14 +19,21 @@
 
     <div class="activity-list">
       <div v-if="!category.activities.length">NO ACTIVITIES HAVE BEEN ADDED TO THIS PLAYLIST YET.</div>
+      
       <div v-for="activity in category.activities" :key="activity.id" class="single-activity">
         <div class="detail">
           <h3>{{ activity.title }}</h3>
           <p>{{ activity.location }}</p>
           <p>{{ activity.time }}</p>
         </div>
-        <button class="register-btn" @click="registerActivity(activity)">REGISTER</button>
+        <button 
+          class="register-btn" 
+          :class="{ registered: isRegistered(activity.id) }"
+          @click="registerActivity(activity)">
+          {{ isRegistered(activity.id) ? "REGISTERED" : "REGISTER" }}
+        </button>
       </div>
+
       <AddActivity :category="category"/>
     </div>
 
@@ -34,6 +41,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { useActivityStore } from '@/stores/activityStore'
 import AddActivity from '@/components/AddActivity.vue'
 import getDocument from '@/composables/getDocument'
@@ -55,6 +63,7 @@ export default {
       mental: mentalIcon,
       movement: movementIcon
     }
+
     const iconDescriptions = {
       community: 'CATEGORY FOSTERS A SENSE OF COMMUNITY AND ENCOURAGES MEANINGFUL CONNECTIONS',
       confidence: 'CATEGORY BOOSTS SELF-CONFIDENCE AND EMPOWERS PERSONAL GROWTH.',
@@ -62,27 +71,35 @@ export default {
       movement: 'CATEGORY PROMOTES PHYSICAL MOVEMENT, ENHANCING STRENGTH AND VITALITY.'
     }
 
-    const registerActivity = (activity) => {
-      store.registerActivity(activity)
+    const isRegistered = (activityId) => {
+      return store.registeredActivities.some(a => a.id === activityId)
     }
 
-    return { error, category, iconMap, iconDescriptions, registerActivity }
+    const registerActivity = (activity) => {
+      if (!isRegistered(activity.id)) {
+        store.registerActivity(activity)
+      }
+    }
+
+    return { error, category, iconMap, iconDescriptions, registerActivity, isRegistered }
   }
 }
 </script>
 
 <style>
- .category-details {
+.category-details {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 80px;
 }
+
 .cover {
   overflow: hidden;
   border-radius: 20px;
   position: relative;
   padding: 160px;
 }
+
 .cover img {
   display: block;
   position: absolute;
@@ -94,23 +111,29 @@ export default {
   max-height: 100%;
   object-fit: cover;
 }
+
 .category-info {
   text-align: center;
 }
+
 .category-info h2 {
   text-transform: capitalize;
   font-size: 28px;
   margin-top: 20px;
 }
+
 .category-info p {
   margin-bottom: 20px;
 }
+
 .username {
   color: #999;
 }
+
 .description {
   text-align: left;
 }
+
 .category-icon {
   text-align: center;
   margin-top: 20px;
@@ -123,12 +146,13 @@ export default {
   margin-bottom: 10px;
 }
 
-.icon-text em{
+.icon-text em {
   font-size: 14px;
   font-weight: bold;
   color: #6853a0 !important;
   font-style: italic;
 }
+
 .single-activity {
   padding: 10px 0;
   display: flex;
@@ -137,18 +161,25 @@ export default {
   border-bottom: 1px dashed var(--secondary);
   margin-bottom: 20px;
 }
+
 .register-btn {
-    background-color: green;
-    margin-top: -5px;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    display: inline-block; 
-    transition: transform 0.5s ease;
+  background-color: green;
+  margin-top: -5px;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block; 
+  transition: transform 0.5s ease;
 }
+
 .register-btn:hover {
-    background-color: green;
-    transform: scale(1.1);
-    }
+  background-color: darkgreen;
+  transform: scale(1.1);
+}
+
+.register-btn.registered {
+  background-color: gray;
+  cursor: not-allowed;
+}
 </style>

@@ -14,6 +14,7 @@ export default {
 
 <template>
   <div class="user-activity">
+    <h2>MY ACTIVITIES</h2>
     <div v-if="registeredActivities.length">
       <div v-for="activity in registeredActivities" :key="activity.id" class="activity-card">
         <h3>{{ activity.title }}</h3>
