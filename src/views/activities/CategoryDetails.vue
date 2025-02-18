@@ -75,7 +75,7 @@ export default {
 
     const registerActivity = (activity, coverUrl) => {
   if (!isRegistered(activity.id)) {
-    store.registerActivity(activity, coverUrl)
+    store.registerActivity(activity, coverUrl)  // Registrer aktiviteten for den nuværende bruger
   }
 }
 
