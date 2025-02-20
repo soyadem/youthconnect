@@ -37,8 +37,6 @@ export const useActivityStore = defineStore('activityStore', () => {
     const docRef = await projectFirestore.collection('registeredActivities').add(newActivity)
     registeredActivities.value.push({ id: docRef.id, ...newActivity })
   }
-
-  // Hent aktiviteter ved opstart
   onMounted(fetchActivities)
 
   return { registeredActivities, registerActivity, fetchActivities }
