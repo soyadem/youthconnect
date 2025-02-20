@@ -21,27 +21,25 @@
       <div v-if="!category.activities.length">NO ACTIVITIES HAVE BEEN ADDED TO THIS PLAYLIST YET.</div>
       
       <div v-for="activity in category.activities" :key="activity.id" class="single-activity">
-        <div class="detail">
-          <h3>{{ activity.title }}</h3>
-          <p>{{ activity.location }}</p>
-          <p>{{ activity.time }}</p>
-        </div>
-        <button 
-          class="register-btn" 
-          :class="{ registered: isRegistered(activity.id) }"
-          @click="registerActivity(activity)">
-          {{ isRegistered(activity.id) ? "REGISTERED" : "REGISTER" }}
-        </button>
-      </div>
+  <div class="detail">
+    <h3>{{ activity.title }}</h3>
+    <p>{{ activity.location }}</p>
+    <p>{{ activity.time }}</p>
+  </div>
+  <button 
+    class="register-btn" 
+    :class="{ registered: isRegistered(activity.id) }"
+    @click="registerActivity(activity, category?.coverUrl)">
+    {{ isRegistered(activity.id) ? "REGISTERED" : "REGISTER" }}
+  </button>
+</div>
+<AddActivity :category="category"/>
 
-      <AddActivity :category="category"/>
     </div>
-
   </div>
 </template>
 
 <script>
-import { computed } from 'vue'
 import { useActivityStore } from '@/stores/activityStore'
 import AddActivity from '@/components/AddActivity.vue'
 import getDocument from '@/composables/getDocument'
@@ -75,11 +73,11 @@ export default {
       return store.registeredActivities.some(a => a.id === activityId)
     }
 
-    const registerActivity = (activity) => {
-      if (!isRegistered(activity.id)) {
-        store.registerActivity(activity)
-      }
-    }
+    const registerActivity = (activity, coverUrl) => {
+  if (!isRegistered(activity.id)) {
+    store.registerActivity(activity, coverUrl)  // Registrer aktiviteten for den nuværende bruger
+  }
+}
 
     return { error, category, iconMap, iconDescriptions, registerActivity, isRegistered }
   }
