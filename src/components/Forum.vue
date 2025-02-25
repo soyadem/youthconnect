@@ -14,7 +14,7 @@ const submitPost = async () => {
     if (newPost.value.trim() && user.value) {
         await projectFirestore.collection("posts").add({
             username: user.value.displayName || "Ukendt Bruger",
-            userId: user.value.uid,
+            userId: user.value.uid, 
             content: newPost.value,
             likes: [], // Gemmer likes som en tom liste
             createdAt: timestamp(),
