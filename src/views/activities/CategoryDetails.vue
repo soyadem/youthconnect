@@ -26,12 +26,15 @@
     <p>{{ activity.location }}</p>
     <p>{{ activity.time }}</p>
   </div>
+  <div class="activity-actions">
   <button 
     class="register-btn" 
     :class="{ registered: isRegistered(activity.id) }"
     @click="registerActivity(activity, category?.coverUrl)">
     {{ isRegistered(activity.id) ? "REGISTERED" : "REGISTER" }}
   </button>
+  <button class="delete-btn" @click="handleClick(activity.id)">DELETE</button>
+</div>
 </div>
 <AddActivity :category="category"/>
 
@@ -47,6 +50,7 @@ import communityIcon from '@/assets/icons/community.png'
 import confidenceIcon from '@/assets/icons/confidence.png'
 import mentalIcon from '@/assets/icons/mental.png'
 import movementIcon from '@/assets/icons/movement.png'
+import useDocument from '@/composables/useDocument'
 
 export default {
   props: ['id'],
@@ -78,8 +82,23 @@ export default {
     store.registerActivity(activity, coverUrl)  // Registrer aktiviteten for den nuværende bruger
   }
 }
+const { updateDoc } = useDocument('category', props.id)
 
-    return { error, category, iconMap, iconDescriptions, registerActivity, isRegistered }
+const handleClick = async (activityId) => {
+  if (!category.value) return
+
+  const updatedActivities = category.value.activities.filter(activity => activity.id !== activityId)
+
+  try {
+    await updateDoc({ activities: updatedActivities }) // Opdater Firestore
+    category.value.activities = updatedActivities // Opdater UI
+    console.log("Activity deleted successfully!")
+  } catch (err) {
+    console.error("Error deleting activity:", err)
+  }
+}
+
+    return { error, category, iconMap, iconDescriptions, registerActivity, isRegistered, handleClick}
   }
 }
 </script>
@@ -162,8 +181,8 @@ export default {
 
 .register-btn {
   background-color: green;
-  margin-top: -5px;
   color: #ffffff;
+  margin-top: -5px;
   padding: 10px 20px;
   border-radius: 5px;
   text-decoration: none;
@@ -179,5 +198,32 @@ export default {
 .register-btn.registered {
   background-color: gray;
   cursor: not-allowed;
+}
+
+.delete-btn {
+  background-color: #d9534f;
+  margin-top: -5px;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block; 
+  transition: transform 0.5s ease;
+}
+
+.delete-btn:hover {
+  background-color: #d9534f;
+  transform: scale(1.1);
+}
+
+.delete-btn.registered {
+  background-color:#d9534f;
+  cursor: not-allowed;
+}
+.activity-actions {
+  display: flex;
+  gap: 10px; /* Giver afstand mellem knapperne */
+  justify-content: flex-start; /* Sørger for at de står til venstre */
+  align-items: center;
 }
 </style>
