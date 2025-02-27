@@ -222,8 +222,8 @@ const handleClick = async (activityId) => {
 }
 .activity-actions {
   display: flex;
-  gap: 10px; /* Giver afstand mellem knapperne */
-  justify-content: flex-start; /* Sørger for at de står til venstre */
+  gap: 10px; 
+  justify-content: flex-start;
   align-items: center;
 }
 </style>
