@@ -1,26 +1,54 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import getCollection from "@/composables/getCollection";
 import { projectFirestore, timestamp, projectAuth } from "@/firebase/config";
 
-const { documents: posts, error } = getCollection("posts");
+const { documents: rawPosts, error } = getCollection("posts");
+const posts = ref([]);
 const newPost = ref("");
+const newTopic = ref("");
+const topics = ref([]);
+const selectedTopic = ref(null);
 const user = ref(projectAuth.currentUser);
 const editingPost = ref(null);
 const editedContent = ref("");
 
+// Forbudte ord
+const forbiddenWords = ["forbudtord1", "forbudtord2", "forbudtord3"];
+
+// Opdater posts, når data ændres
+watchEffect(() => {
+    posts.value = rawPosts.value || [];
+    topics.value = [...new Set(posts.value.map(post => post.topic))];
+});
+
+// Funktion til at oprette et nyt emne
+const createTopic = () => {
+    if (!newTopic.value.trim()) return;
+    topics.value.push(newTopic.value.trim());
+    selectedTopic.value = newTopic.value.trim();
+    newTopic.value = "";
+};
+
 // Funktion til at sende et nyt indlæg
 const submitPost = async () => {
-    if (newPost.value.trim() && user.value) {
-        await projectFirestore.collection("posts").add({
-            username: user.value.displayName || "Ukendt Bruger",
-            userId: user.value.uid, 
-            content: newPost.value,
-            likes: [], // Gemmer likes som en tom liste
-            createdAt: timestamp(),
-        });
-        newPost.value = "";
+    if (!newPost.value.trim() || !user.value || !selectedTopic.value) return;
+    
+    // Tjek for forbudte ord
+    if (forbiddenWords.some(word => newPost.value.toLowerCase().includes(word))) {
+        alert("Dit indlæg indeholder forbudte ord.");
+        return;
     }
+    
+    await projectFirestore.collection("posts").add({
+        username: user.value.displayName || "Ukendt Bruger",
+        userId: user.value.uid, 
+        topic: selectedTopic.value,
+        content: newPost.value,
+        likes: [],
+        createdAt: timestamp(),
+    });
+    newPost.value = "";
 };
 
 // Funktion til at slette et indlæg
@@ -38,10 +66,15 @@ const startEditing = (post) => {
 
 // Gem ændringerne i et indlæg
 const saveEdit = async (postId) => {
+    if (forbiddenWords.some(word => editedContent.value.toLowerCase().includes(word))) {
+        alert("Dit indlæg indeholder forbudte ord.");
+        return;
+    }
+    
     await projectFirestore.collection("posts").doc(postId).update({
         content: editedContent.value,
     });
-    editingPost.value = null; // Stop redigering
+    editingPost.value = null;
 };
 
 // Funktion til at like et opslag
@@ -52,13 +85,11 @@ const toggleLike = async (post) => {
     }
 
     const postRef = projectFirestore.collection("posts").doc(post.id);
-    let updatedLikes = post.likes ? [...post.likes] : []; // Sikrer, at der altid er en liste
+    let updatedLikes = post.likes ? [...post.likes] : [];
 
     if (updatedLikes.includes(user.value.uid)) {
-        // Hvis brugeren allerede har liket, fjern like
-        updatedLikes = updatedLikes.filter((uid) => uid !== user.value.uid);
+        updatedLikes = updatedLikes.filter(uid => uid !== user.value.uid);
     } else {
-        // Hvis brugeren ikke har liket, tilføj like
         updatedLikes.push(user.value.uid);
     }
 
@@ -72,63 +103,126 @@ projectAuth.onAuthStateChanged((firebaseUser) => {
 </script>
 
 <template>
-    <div class="max-w-2xl mx-auto p-6 bg-gray-100 rounded-xl shadow-md">
-        <h2 class="text-2xl font-bold mb-4 text-center">Forum</h2>
+  <div class="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-xl">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Forum</h2>
 
-        <p v-if="!user" class="text-red-500 text-center">
-            Du skal være logget ind for at skrive et opslag.
-        </p>
+    <!-- Login Check -->
+    <p v-if="!user" class="text-red-500 text-center mb-4">
+      Du skal være logget ind for at skrive et opslag.
+    </p>
 
-        <div v-if="user" class="flex flex-col gap-4">
-            <textarea v-model="newPost"
-                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Skriv dit indlæg..."></textarea>
-            <button @click="submitPost"
-                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition">
-                Send
-            </button>
-        </div>
+    <div v-if="user" class="flex flex-col gap-6">
+      <!-- Create Topic Section -->
+      <div class="flex gap-4">
+        <input
+          v-model="newTopic"
+          class="p-3 w-full border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Nyt emne"
+        />
+        <button
+          @click="createTopic"
+          class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition"
+        >
+          Opret emne
+        </button>
+      </div>
 
-        <div v-if="error" class="text-red-500 mt-4">{{ error }}</div>
+      <!-- Select Topic -->
+      <div>
+        <select
+          v-model="selectedTopic"
+          class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option v-for="topic in topics" :key="topic" :value="topic">
+            {{ topic }}
+          </option>
+        </select>
+      </div>
 
-        <div class="mt-6 space-y-4">
-            <div v-for="post in posts" :key="post.id"
-                class="p-4 bg-white rounded-lg shadow flex flex-col">
-                <p class="text-sm text-gray-500">
-                    <strong>{{ post.username }}</strong>
-                </p>
-
-                <!-- Redigeringsfelt -->
-                <div v-if="editingPost === post.id">
-                    <textarea v-model="editedContent" class="w-full p-2 border rounded"></textarea>
-                    <button @click="saveEdit(post.id)" class="bg-green-500 text-white py-1 px-3 rounded mt-2">
-                        Gem
-                    </button>
-                    <button @click="editingPost = null" class="bg-gray-500 text-white py-1 px-3 rounded mt-2 ml-2">
-                        Annuller
-                    </button>
-                </div>
-
-                <!-- Normal visning -->
-                <p v-else class="text-lg text-gray-800">{{ post.content }}</p>
-
-                <!-- Synes godt om knap -->
-                <div class="flex items-center gap-2 mt-2">
-                    <button @click="toggleLike(post)" class="bg-pink-500 text-white py-1 px-3 rounded flex items-center gap-1">
-                        ❤️ {{ post.likes ? post.likes.length : 0 }}
-                    </button>
-                </div>
-
-                <!-- Rediger / Slet knapper (kun synlig for ejeren) -->
-                <div v-if="user && user.uid === post.userId" class="flex gap-2 mt-2">
-                    <button @click="startEditing(post)" class="bg-yellow-500 text-white py-1 px-3 rounded">
-                        Rediger
-                    </button>
-                    <button @click="deletePost(post.id)" class="bg-red-500 text-white py-1 px-3 rounded">
-                        Slet
-                    </button>
-                </div>
-            </div>
-        </div>
+      <!-- Create Post -->
+      <textarea
+        v-model="newPost"
+        class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Skriv dit indlæg..."
+      ></textarea>
+      <button
+        @click="submitPost"
+        class="bg-blue-500 text-white py-3 px-8 rounded-lg w-full hover:bg-blue-600 transition"
+      >
+        Send
+      </button>
     </div>
+
+    <div v-if="error" class="text-red-500 mt-4 text-center">{{ error }}</div>
+
+    <!-- Posts Section -->
+    <div class="mt-8 space-y-6">
+      <div
+        v-for="post in (posts || []).filter(p => p.topic === selectedTopic)"
+        :key="post.id"
+        class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all"
+      >
+        <div class="flex justify-between items-start mb-4">
+          <p class="text-sm text-gray-500">
+            <strong>{{ post.username }}</strong>
+          </p>
+        </div>
+
+        <!-- Post Content and Actions (flex) -->
+        <div class="flex items-start gap-6">
+          <!-- Post Content -->
+          <div class="flex-1">
+            <div v-if="editingPost === post.id">
+              <textarea
+                v-model="editedContent"
+                class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></textarea>
+              <div class="flex justify-end gap-2 mt-2">
+                <button
+                  @click="saveEdit(post.id)"
+                  class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition"
+                >
+                  Gem
+                </button>
+                <button
+                  @click="editingPost = null"
+                  class="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition"
+                >
+                  Annuller
+                </button>
+              </div>
+            </div>
+
+            <p v-else class="text-lg text-gray-800">{{ post.content }}</p>
+          </div>
+
+          <!-- Post Actions (Like, Edit, Delete) -->
+          <div class="flex flex-col items-end space-y-2">
+            <button
+              @click="toggleLike(post)"
+              class="bg-pink-500 text-white py-2 px-6 rounded-lg hover:bg-pink-600 transition"
+            >
+              ❤️ {{ post.likes ? post.likes.length : 0 }}
+            </button>
+            <div v-if="user && user.uid === post.userId" class="flex flex-col gap-2">
+              <button
+                @click="startEditing(post)"
+                class="bg-yellow-500 text-white py-1 px-3 rounded-lg hover:bg-yellow-600 transition"
+              >
+                Rediger
+              </button>
+              <button
+                @click="deletePost(post.id)"
+                class="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition"
+              >
+                Slet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+
+
