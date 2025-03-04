@@ -14,7 +14,7 @@ const editingPost = ref(null);
 const editedContent = ref("");
 
 // Forbudte ord
-const forbiddenWords = ["forbudtord1", "forbudtord2", "forbudtord3"];
+const forbiddenWords = ["fuck", "forbudtord2", "forbudtord3"];
 
 // Opdater posts, når data ændres
 watchEffect(() => {
