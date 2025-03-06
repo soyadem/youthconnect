@@ -79,7 +79,7 @@ export default {
 
     const registerActivity = (activity, coverUrl) => {
   if (!isRegistered(activity.id)) {
-    store.registerActivity(activity, coverUrl)  // Registrer aktiviteten for den nuværende bruger
+    store.registerActivity(activity, coverUrl)
   }
 }
 const { updateDoc } = useDocument('category', props.id)

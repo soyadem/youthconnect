@@ -5,7 +5,7 @@
         <h1><router-link :to="{ name: 'Home' }" class="brand">youthconnect</router-link></h1>
         <div class="links">
             <div v-if="user">
-                <router-link class="btn" :to="{name: 'CreateCategory' }">CREATE CATEGORY</router-link>
+                
                 <router-link class="btn" :to="{name: 'UserActivities' }">MY ACTIVITIES</router-link>
                 <router-link class="btn" :to="{name: 'Forum'}">FORUM</router-link>
                 <router-link class="btn" :to="{name: 'AboutUs'}">ABOUT US</router-link>
