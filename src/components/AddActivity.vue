@@ -6,6 +6,7 @@
       <input type="text" placeholder="ACTIVITY TITLE" required v-model="title">
       <input type="text" placeholder="LOCATION" required v-model="location">
       <input type="text" placeholder="TIME" required v-model="time">
+      <input type="text" placeholder="MENTOR" required v-model='mentor'>
       <button>ADD</button>
     </form>
   </div>
@@ -21,6 +22,8 @@ export default {
     const title = ref('')
     const location = ref('')
     const time = ref('')
+    const mentor = ref('')
+    
     const showForm = ref(false)
     const { updateDoc } = useCollection('category')
 
@@ -34,6 +37,7 @@ export default {
         title: title.value,
         location: location.value,
         time: time.value,
+        mentor: mentor.value,
         id: Math.floor(Math.random() * 1000)
       }
       await updateDoc(props.category.id, {
@@ -42,9 +46,10 @@ export default {
       title.value = ''
       location.value = ''
       time.value = ''
+      mentor.value = ''
     }
 
-    return { title, location, time, showForm, handleSubmit }
+    return { title, location, time, mentor, showForm, handleSubmit }
   }
 
 }

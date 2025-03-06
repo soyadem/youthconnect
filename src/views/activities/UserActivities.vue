@@ -23,6 +23,7 @@ export default {
           <h3>{{ activity.title }}</h3>
           <p>{{ activity.location }}</p>
           <p>{{ activity.time }}</p>
+          <p>{{ activity.mentor }}</p>
         </div>
       </div>
     </div>
