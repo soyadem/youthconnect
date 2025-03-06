@@ -36,7 +36,7 @@
   <button class="delete-btn" @click="handleClick(activity.id)">DELETE</button>
 </div>
 </div>
-<AddActivity v-if="role === 'admin'" :category="category"/>
+<AddActivity v-if="role === 'admin'" :category="category" />
 
     </div>
   </div>
@@ -60,6 +60,8 @@ export default {
     const { error, document: category } = getDocument('category', props.id)
     const { user, role } = getUser()
     const store = useActivityStore()
+    console.log('User role:', role)
+
 
     const iconMap = {
       community: communityIcon,
