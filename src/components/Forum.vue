@@ -14,7 +14,7 @@ const editingPost = ref(null);
 const editedContent = ref("");
 
 // Forbudte ord
-const forbiddenWords = ["fuck",];
+const forbiddenWords = ["fuck"];
 
 // Opdater posts, når data ændres
 watchEffect(() => {
@@ -224,5 +224,3 @@ projectAuth.onAuthStateChanged((firebaseUser) => {
     </div>
   </div>
 </template>
-
-
