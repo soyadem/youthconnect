@@ -36,7 +36,7 @@
   <button class="delete-btn" @click="handleClick(activity.id)">DELETE</button>
 </div>
 </div>
-<AddActivity :category="category"/>
+<AddActivity v-if="role === 'admin'" :category="category"/>
 
     </div>
   </div>
@@ -51,12 +51,14 @@ import confidenceIcon from '@/assets/icons/confidence.png'
 import mentalIcon from '@/assets/icons/mental.png'
 import movementIcon from '@/assets/icons/movement.png'
 import useDocument from '@/composables/useDocument'
+import getUser from '@/composables/getUser'
 
 export default {
   props: ['id'],
   components: { AddActivity },
   setup(props) {
     const { error, document: category } = getDocument('category', props.id)
+    const { user, role } = getUser()
     const store = useActivityStore()
 
     const iconMap = {
@@ -98,7 +100,7 @@ const handleClick = async (activityId) => {
   }
 }
 
-    return { error, category, iconMap, iconDescriptions, registerActivity, isRegistered, handleClick}
+    return { error, category, iconMap, iconDescriptions, registerActivity, isRegistered, handleClick, user, role}
   }
 }
 </script>
