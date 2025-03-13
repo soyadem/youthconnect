@@ -22,7 +22,7 @@ watchEffect(() => {
     topics.value = [...new Set(posts.value.map(post => post.topic))];
 });
 
-// Funktion til at oprette et nyt emne
+// Opret nyt emne
 const createTopic = () => {
     if (!newTopic.value.trim()) return;
     topics.value.push(newTopic.value.trim());
@@ -30,11 +30,10 @@ const createTopic = () => {
     newTopic.value = "";
 };
 
-// Funktion til at sende et nyt indlæg
+// Send et nyt indlæg
 const submitPost = async () => {
     if (!newPost.value.trim() || !user.value || !selectedTopic.value) return;
     
-    // Tjek for forbudte ord
     if (forbiddenWords.some(word => newPost.value.toLowerCase().includes(word))) {
         alert("Dit indlæg indeholder forbudte ord.");
         return;
@@ -51,20 +50,20 @@ const submitPost = async () => {
     newPost.value = "";
 };
 
-// Funktion til at slette et indlæg
+// Slet et indlæg
 const deletePost = async (postId) => {
     if (confirm("Er du sikker på, at du vil slette dette indlæg?")) {
         await projectFirestore.collection("posts").doc(postId).delete();
     }
 };
 
-// Start redigering af et indlæg
+// Start redigering
 const startEditing = (post) => {
     editingPost.value = post.id;
     editedContent.value = post.content;
 };
 
-// Gem ændringerne i et indlæg
+// Gem ændringer i indlæg
 const saveEdit = async (postId) => {
     if (forbiddenWords.some(word => editedContent.value.toLowerCase().includes(word))) {
         alert("Dit indlæg indeholder forbudte ord.");
@@ -77,7 +76,7 @@ const saveEdit = async (postId) => {
     editingPost.value = null;
 };
 
-// Funktion til at like et opslag
+// Like et indlæg
 const toggleLike = async (post) => {
     if (!user.value) {
         alert("Du skal være logget ind for at like!");
@@ -96,127 +95,63 @@ const toggleLike = async (post) => {
     await postRef.update({ likes: updatedLikes });
 };
 
-// Hold øje med om brugeren skifter
+// Opdater brugerstatus
 projectAuth.onAuthStateChanged((firebaseUser) => {
     user.value = firebaseUser;
 });
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-xl">
-    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Forum</h2>
+  <div class="container">
+    <div class="forum-box">
+      <h2 class="text-center text-3xl font-bold mb-6">Forum</h2>
 
-    <!-- Login Check -->
-    <p v-if="!user" class="text-red-500 text-center mb-4">
-      Du skal være logget ind for at skrive et opslag.
-    </p>
+      <!-- Login Check -->
+      <p v-if="!user" class="text-red-500 text-center mb-4">
+        Du skal være logget ind for at skrive et opslag.
+      </p>
 
-    <div v-if="user" class="flex flex-col gap-6">
-      <!-- Create Topic Section -->
-      <div class="flex gap-4">
-        <input
-          v-model="newTopic"
-          class="p-3 w-full border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Nyt emne"
-        />
-        <button
-          @click="createTopic"
-          class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition"
-        >
-          Opret emne
-        </button>
-      </div>
+      <div v-if="user" class="forum-actions">
+        <!-- Opret emne -->
+        <div class="input-group">
+          <input v-model="newTopic" placeholder="Nyt emne" />
+          <button @click="createTopic" class="green">Opret emne</button>
+        </div>
 
-      <!-- Select Topic -->
-      <div>
-        <select
-          v-model="selectedTopic"
-          class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
+        <!-- Vælg emne -->
+        <select v-model="selectedTopic">
           <option v-for="topic in topics" :key="topic" :value="topic">
             {{ topic }}
           </option>
         </select>
+
+        <!-- Skriv indlæg -->
+        <textarea v-model="newPost" placeholder="Skriv dit indlæg..."></textarea>
+        <button @click="submitPost" class="blue">Send</button>
       </div>
 
-      <!-- Create Post -->
-      <textarea
-        v-model="newPost"
-        class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Skriv dit indlæg..."
-      ></textarea>
-      <button
-        @click="submitPost"
-        class="bg-blue-500 text-white py-3 px-8 rounded-lg w-full hover:bg-blue-600 transition"
-      >
-        Send
-      </button>
-    </div>
+      <div v-if="error" class="error">{{ error }}</div>
 
-    <div v-if="error" class="text-red-500 mt-4 text-center">{{ error }}</div>
+      <!-- Indlæg -->
+      <div class="posts">
+        <div v-for="post in (posts || []).filter(p => p.topic === selectedTopic)" :key="post.id" class="post">
+          <p class="username"><strong>{{ post.username }}</strong></p>
 
-    <!-- Posts Section -->
-    <div class="mt-8 space-y-6">
-      <div
-        v-for="post in (posts || []).filter(p => p.topic === selectedTopic)"
-        :key="post.id"
-        class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all"
-      >
-        <div class="flex justify-between items-start mb-4">
-          <p class="text-sm text-gray-500">
-            <strong>{{ post.username }}</strong>
-          </p>
-        </div>
-
-        <!-- Post Content and Actions (flex) -->
-        <div class="flex items-start gap-6">
-          <!-- Post Content -->
-          <div class="flex-1">
-            <div v-if="editingPost === post.id">
-              <textarea
-                v-model="editedContent"
-                class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></textarea>
-              <div class="flex justify-end gap-2 mt-2">
-                <button
-                  @click="saveEdit(post.id)"
-                  class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition"
-                >
-                  Gem
-                </button>
-                <button
-                  @click="editingPost = null"
-                  class="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition"
-                >
-                  Annuller
-                </button>
-              </div>
+          <div v-if="editingPost === post.id">
+            <textarea v-model="editedContent"></textarea>
+            <div class="button-group">
+              <button @click="saveEdit(post.id)" class="green">Gem</button>
+              <button @click="editingPost = null" class="gray">Annuller</button>
             </div>
-
-            <p v-else class="text-lg text-gray-800">{{ post.content }}</p>
           </div>
 
-          <!-- Post Actions (Like, Edit, Delete) -->
-          <div class="flex flex-col items-end space-y-2">
-            <button
-              @click="toggleLike(post)"
-              class="bg-pink-500 text-white py-2 px-6 rounded-lg hover:bg-pink-600 transition"
-            >
-              ❤️ {{ post.likes ? post.likes.length : 0 }}
-            </button>
-            <div v-if="user && user.uid === post.userId" class="flex flex-col gap-2">
-              <button
-                @click="startEditing(post)"
-                class="bg-yellow-500 text-white py-1 px-3 rounded-lg hover:bg-yellow-600 transition"
-              >
-                Rediger
-              </button>
-              <button
-                @click="deletePost(post.id)"
-                class="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition"
-              >
-                Slet
-              </button>
+          <p v-else class="content">{{ post.content }}</p>
+
+          <div class="actions">
+            <button @click="toggleLike(post)" class="pink">❤️ {{ post.likes ? post.likes.length : 0 }}</button>
+            <div v-if="user && user.uid === post.userId">
+              <button @click="startEditing(post)" class="yellow">Rediger</button>
+              <button @click="deletePost(post.id)" class="red">Slet</button>
             </div>
           </div>
         </div>
@@ -224,3 +159,52 @@ projectAuth.onAuthStateChanged((firebaseUser) => {
     </div>
   </div>
 </template>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  color: #212529;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+}
+
+.forum-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+input, textarea, select {
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  width: 100%;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.green { background: #28a745; color: white; }
+.blue { background: #007bff; color: white; }
+.red { background: #dc3545; color: white; }
+.pink { background: #ff1493; color: white; }
+.yellow { background: #ffc107; color: black; }
+</style>
