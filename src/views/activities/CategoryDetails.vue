@@ -34,7 +34,7 @@
     @click="registerActivity(activity, category?.coverUrl)">
     {{ isRegistered(activity.id) ? "REGISTERED" : "REGISTER" }}
   </button>
-  <button class="delete-btn" @click="handleClick(activity.id)">DELETE</button>
+  <button v-if="role === 'admin'" class="delete-btn" @click="handleClick(activity.id)">DELETE</button>
 </div>
 </div>
 <AddActivity v-if="role === 'admin'" :category="category" />
