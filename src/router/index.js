@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/auth/Login.vue'
 import Signup from '../views/auth/Signup.vue'
 import AboutUs from '../views/auth/AboutUs.vue'
+import FeedbackForm from '../components/FeedbackForm.vue'
 import CreateCategory from '../views/activities/CreateCategory'
 import CategoryDetails from '../views/activities/CategoryDetails'
 import Forum from '../components/Forum'
@@ -38,6 +39,11 @@ const routes = [
     path: '/aboutus',
     name: 'AboutUs',
     component: AboutUs
+  },
+  {
+    path: '/feedback',
+    name: 'FeedbackForm',
+    component: FeedbackForm
   },
   {
     path: '/categories/create',
